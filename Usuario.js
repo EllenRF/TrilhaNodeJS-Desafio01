@@ -1,8 +1,8 @@
 const usuario = {
-    nome,
-    user,
-    senha,
-    email
-};
+        nome: "",
+        user: "",
+        senha: "",
+        email: ""
+    }
 
-export default usuario;
+    export default usuario;
