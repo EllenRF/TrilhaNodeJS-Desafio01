@@ -6,15 +6,15 @@ import usuarios from './usuarios.json' assert { type: 'json' };
 function cadastroNovoUsuario(){
 
     let listaUsuarios = [];
-    
+
     if(!usuarios?.length){
         let usuario = usuarios?.nome ? usuarios : null;
         if(usuario){
-            listaUsuarios.push(usuario)
+            listaUsuarios.push(usuario);
         }
     }
     else{
-        listaUsuarios.push(...usuarios)
+        listaUsuarios.push(...usuarios);
     }
     
     inquirer
@@ -30,30 +30,59 @@ function cadastroNovoUsuario(){
         {
             name: 'email',
             message: 'qual seu email?'
-        },
-        {
-            name: 'senha',
-            message: 'qual sua senha?',
-        },
-    
+        }
       ])
-      .then((answers) => {
-        user['nome'] = answers.nome;
-        user['user'] = answers.user;
-        user['email'] = answers.email;
-        user['senha'] = answers.senha;
-    
-        listaUsuarios.push(user);
-        const jsonUsuarios = JSON.stringify(listaUsuarios); 
-        fs.writeFileSync('usuarios.json', jsonUsuarios);
-    
-        console.log(user);
-    
-        // INSERIR MENSAGEM DE CONCLUSÃO DE CADASTRO
+      .then((respostas) => {
+        user['nome'] = respostas.nome;
+        user['user'] = respostas.user;
+        user['email'] = respostas.email;
+       
+        if(getSenha()){
+            listaUsuarios.push(user);
+            const jsonUsuarios = JSON.stringify(listaUsuarios); 
+            fs.writeFileSync('usuarios.json', jsonUsuarios);
+            console.log(`Usuario ${user['user']} cadastrado com sucesso`);
+        }
     })
-      .catch((error) => {
-       console.log(error)
-      });
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+console.log("Usuario cadastrado com sucesso!");
+
+function getSenha(){inquirer
+.prompt([{
+    name: 'senha',
+    message: 'Digite sua senha:'
+}])
+.then((resp) =>{
+    if(!validarSenha(resp.senha)){
+        getSenha();
+        return false;
+    }
+    else{
+        user['senha'] = resp.senha;
+        return true;
+    }
+})
+.catch((error) => {console.log(error);});
+}
+
+    function validarSenha(senha){
+    if(senha.length <= 7){
+    console.log("Senha deve ter pelo menos 8 caracteres");
+    return false;
+}
+    if(!(/[A-Z]/.test(senha))){
+    console.log("Senha deve ter pelo menos uma letra maiuscula");
+    return false;
+}
+    if(!(/[0-9]/.test(senha))){
+    console.log("Senha deve conter pelo menos um número");
+    return false;
+}
+    return true;
 }
 
 export default cadastroNovoUsuario;
