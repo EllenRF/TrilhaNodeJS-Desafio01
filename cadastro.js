@@ -1,87 +1,119 @@
-import user  from './Usuario.js';
+//import usuario from './Usuario.js';
 import inquirer from 'inquirer';
 import fs from 'fs';
 import usuarios from './usuarios.json' assert { type: 'json' };
 
-function cadastroNovoUsuario(){
+let listaUsuarios = [];
 
-    let listaUsuarios = [];
+ const usuario = {
+    nome: "",
+    username: "",
+    senha: "",
+    email: ""
+} 
 
-    if(!usuarios?.length){
-        let usuario = usuarios?.nome ? usuarios : null;
-        if(usuario){
-            listaUsuarios.push(usuario);
-        }
-    }
-    else{
+function cadastroNovoUsuario() {
+     if(usuarios?.length){
         listaUsuarios.push(...usuarios);
-    }
-    
-    inquirer
-      .prompt([
-        {
-            name: 'nome',
-            message: 'qual seu nome?'
-        },
-        {
-            name: 'user',
-            message: 'qual seu user?'
-        },
-        {
-            name: 'email',
-            message: 'qual seu email?'
-        }
-      ])
-      .then((respostas) => {
-        user['nome'] = respostas.nome;
-        user['user'] = respostas.user;
-        user['email'] = respostas.email;
-       
-        if(getSenha()){
-            listaUsuarios.push(user);
-            const jsonUsuarios = JSON.stringify(listaUsuarios); 
-            fs.writeFileSync('usuarios.json', jsonUsuarios);
-            console.log(`Usuario ${user['user']} cadastrado com sucesso`);
-        }
-    })
-    .catch((error) => {
-        console.log(error);
-    });
+    } 
+    setNome();
 }
 
-console.log("Usuario cadastrado com sucesso!");
 
-function getSenha(){inquirer
-.prompt([{
-    name: 'senha',
-    message: 'Digite sua senha:'
-}])
-.then((resp) =>{
-    if(!validarSenha(resp.senha)){
-        getSenha();
+function serializaUsuario(){
+    listaUsuarios.push(usuario);
+    const jsonUsuarios = JSON.stringify(listaUsuarios);
+    fs.writeFileSync('usuarios.json', jsonUsuarios);
+    console.log(`Usuario ${usuario['username']} cadastrado com sucesso`);
+    
+} 
+
+function setNome() {
+    inquirer
+    .prompt([{
+        name: 'nome',
+        message: 'Digite seu nome:'
+    }])
+    .then((resp) => {
+        if (validarCampo(resp.nome)){
+            usuario['nome'] = resp.nome;
+            setUsername();
+        } 
+        else setNome(); 
+    })
+    .catch((error) => { console.log(error); });
+}
+
+function setUsername() {
+    inquirer
+    .prompt([{
+        name: 'username',
+        message: 'Digite seu username:'
+    }])
+    .then((resp) => {       
+        if (validarCampo(resp.username)){
+            usuario['username'] = resp.username;
+            setEmail();
+        } 
+        else setUsername(); 
+    })
+    .catch((error) => { console.log(error); });
+}
+
+function setEmail() {
+    inquirer
+    .prompt([{
+        name: 'email',
+        message: 'Digite seu email:'
+    }])
+    .then((resp) => {
+        if (validarCampo(resp.email)){
+            usuario['email'] = resp.email;
+            setSenha();
+        } 
+        else setEmail(); 
+    })
+    .catch((error) => { console.log(error); });
+}
+
+function setSenha() {
+    inquirer
+    .prompt([{
+        name: 'senha',
+        message: 'Digite sua senha:'
+    }])
+    .then((resp) => {   
+        if(validarSenha(resp.senha)){
+            usuario['senha'] =  resp.senha; 
+            serializaUsuario();
+        } 
+        else setSenha();
+    })
+    .catch((error) => { console.log(error); });
+}
+function validarCampo(campo){
+    if(!campo?.length){
+        console.log("Campo obrigatorio");
         return false;
     }
-    else{
-        user['senha'] = resp.senha;
-        return true;
-    }
-})
-.catch((error) => {console.log(error);});
+    else return true;
 }
 
-    function validarSenha(senha){
-    if(senha.length <= 7){
-    console.log("Senha deve ter pelo menos 8 caracteres");
-    return false;
-}
-    if(!(/[A-Z]/.test(senha))){
-    console.log("Senha deve ter pelo menos uma letra maiuscula");
-    return false;
-}
-    if(!(/[0-9]/.test(senha))){
-    console.log("Senha deve conter pelo menos um número");
-    return false;
-}
+function validarSenha(senha) {
+    if (senha.length <= 7) {
+        console.log("Senha deve ter pelo menos 8 caracteres");
+        return false;
+    }
+    // TESTAR LETRA MAIUSCULA
+    if (!(/[A-Z]/.test(senha))) {
+        console.log("Senha deve ter pelo menos uma letra maiuscula");
+        return false;
+    }
+    // TESTAR NUMERO
+    if (!(/[0-9]/.test(senha))) {
+        console.log("Senha deve conter pelo menos um número");
+        return false;
+    }
     return true;
 }
 

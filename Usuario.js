@@ -1,6 +1,6 @@
 const usuario = {
         nome: "",
-        user: "",
+        username: "",
         senha: "",
         email: ""
     }
