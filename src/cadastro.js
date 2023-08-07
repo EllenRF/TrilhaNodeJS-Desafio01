@@ -1,7 +1,8 @@
 //import usuario from './Usuario.js';
 import inquirer from 'inquirer';
 import fs from 'fs';
-import usuarios from './usuarios.json' assert { type: 'json' };
+import usuarios from '../usuarios.json' assert { type: 'json' };
+import validarCampo from '../services/services.js';
 
 let listaUsuarios = [];
 
@@ -18,7 +19,6 @@ function cadastroNovoUsuario() {
     } 
     setNome();
 }
-
 
 function serializaUsuario(){
     listaUsuarios.push(usuario);
@@ -91,13 +91,7 @@ function setSenha() {
     })
     .catch((error) => { console.log(error); });
 }
-function validarCampo(campo){
-    if(!campo?.length){
-        console.log("Campo obrigatorio");
-        return false;
-    }
-    else return true;
-}
+
 
 function validarSenha(senha) {
     if (senha.length <= 7) {

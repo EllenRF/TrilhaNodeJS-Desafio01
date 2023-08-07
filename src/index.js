@@ -1,7 +1,7 @@
-import usuario from './Usuario.js';
+import usuario from '../Usuario.js';
 import cadastroNovoUsuario from './cadastro.js';
 import inquirer from 'inquirer';
-import usuarios from './usuarios.json' assert { type: 'json' };
+import usuarios from '../usuarios.json' assert { type: 'json' };
 
 inquirer.prompt(
     [{
