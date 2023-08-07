@@ -1,5 +1,5 @@
 import inquirer from 'inquirer';
-import validarCampo from '../services/services.js'
+import {validarCampo, usuario} from './services.js'
 import fs from 'fs';
 import usuarios from '../usuarios.json' assert { type: 'json' };
 

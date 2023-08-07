@@ -1,34 +1,33 @@
 //import usuario from './Usuario.js';
 import inquirer from 'inquirer';
 import fs from 'fs';
-import usuarios from '../usuarios.json' assert { type: 'json' };
-//import validarCampo from "./services.js"
-import {usuario} from './services.js'
+import usuarios from './usuarios.json' assert { type: 'json' };
 
-import {validarCampo} from './services.js'
-
-
-import { salvarUsuario } from './index.js';
 let listaUsuarios = [];
 
-
+ const usuario = {
+    nome: "",
+    username: "",
+    senha: "",
+    email: ""
+} 
 
 function cadastroNovoUsuario() {
      if(usuarios?.length){
         listaUsuarios.push(...usuarios);
     } 
-    setEmail();
+    setNome();
 }
 
 
-/* function serializaUsuario(){
+function serializaUsuario(){
     listaUsuarios.push(usuario);
     const jsonUsuarios = JSON.stringify(listaUsuarios);
     fs.writeFileSync('usuarios.json', jsonUsuarios);
     console.log(`Usuario ${usuario['username']} cadastrado com sucesso`);
     
-}  */
-/* 
+} 
+
 function setNome() {
     inquirer
     .prompt([{
@@ -44,9 +43,9 @@ function setNome() {
     })
     .catch((error) => { console.log(error); });
 }
- */
-/* function setUsername() {
-inquirer
+
+function setUsername() {
+    inquirer
     .prompt([{
         name: 'username',
         message: 'Digite seu username:'
@@ -60,7 +59,7 @@ inquirer
     })
     .catch((error) => { console.log(error); });
 }
- */
+
 function setEmail() {
     inquirer
     .prompt([{
@@ -86,13 +85,19 @@ function setSenha() {
     .then((resp) => {   
         if(validarSenha(resp.senha)){
             usuario['senha'] =  resp.senha; 
-            salvarUsuario(usuario['email'], usuario['senha']);
+            serializaUsuario();
         } 
         else setSenha();
     })
     .catch((error) => { console.log(error); });
 }
-
+function validarCampo(campo){
+    if(!campo?.length){
+        console.log("Campo obrigatorio");
+        return false;
+    }
+    else return true;
+}
 
 function validarSenha(senha) {
     if (senha.length <= 7) {
