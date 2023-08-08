@@ -1,5 +1,5 @@
-function validarCampo(campo){
-    if(!campo.length){
+function validarCampo(campo) {
+    if (!campo.length) {
         console.log("Campo obrigatorio");
         return false;
     }
@@ -8,7 +8,8 @@ function validarCampo(campo){
 
 const usuario = {
     email: "",
-    senha: ""
-} 
+    senha: "",
+    username: ""
+}
 
-export {validarCampo, usuario}
+export { validarCampo, usuario }

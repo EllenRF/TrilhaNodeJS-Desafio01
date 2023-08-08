@@ -1,8 +1,11 @@
-import {usuario, validarCampo} from './services.js';
 import cadastroNovoUsuario from './cadastro.js';
 import inquirer from 'inquirer';
+import { iniciarFirebase, todosUsuarios } from '../firebaseServices/firebase.js';
+import { logarUsuario } from './login.js';
+
+iniciarFirebase();
 //import usuarios from '../usuarios.json' assert { type: 'json' };
-import { initializeApp } from 'firebase/app';
+/* import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs, doc, addDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -27,17 +30,17 @@ export async function salvarUsuario(email, senha) {
     console.log('Deu certo :) ');
 }
 
-
+ */
 inquirer.prompt(
     [{
         name: 'navegacao',
-        message: '1- Login de Usuario \r\n 2- Cadastrar novo Usuario'
+        message: '1- Login de Usuario \r\n  2- Cadastrar novo Usuario'
     }]
 ).then((answer) => {
     // while(answer.navegacao != 1 || answer.navegacao != 2){
     switch (answer.navegacao) {
         case '1':
-            //CRIAÇÃO DE LOGIN
+            todosUsuarios();
             break;
         case '2':
             cadastroNovoUsuario();

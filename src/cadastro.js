@@ -1,51 +1,15 @@
-//import usuario from './Usuario.js';
 import inquirer from 'inquirer';
-import fs from 'fs';
-import usuarios from '../usuarios.json' assert { type: 'json' };
-//import validarCampo from "./services.js"
-import {usuario} from './services.js'
-
-import {validarCampo} from './services.js'
-
-
-import { salvarUsuario } from './index.js';
-let listaUsuarios = [];
-
-
+//import usuarios from '../usuarios.json' assert { type: 'json' };
+import { usuario } from './services.js'
+import { validarCampo } from './services.js'
+import { salvarUsuario } from '../firebaseServices/firebase.js';
+//let listaUsuarios = [];
 
 function cadastroNovoUsuario() {
-     if(usuarios?.length){
-        listaUsuarios.push(...usuarios);
-    } 
-    setEmail();
+    setUsername();
 }
 
-
-/* function serializaUsuario(){
-    listaUsuarios.push(usuario);
-    const jsonUsuarios = JSON.stringify(listaUsuarios);
-    fs.writeFileSync('usuarios.json', jsonUsuarios);
-    console.log(`Usuario ${usuario['username']} cadastrado com sucesso`);
-    
-}  */
-/* 
-function setNome() {
-    inquirer
-    .prompt([{
-        name: 'nome',
-        message: 'Digite seu nome:'
-    }])
-    .then((resp) => {
-        if (validarCampo(resp.nome)){
-            usuario['nome'] = resp.nome;
-            setUsername();
-        } 
-        else setNome(); 
-    })
-    .catch((error) => { console.log(error); });
-}
- */
-/* function setUsername() {
+function setUsername() {
 inquirer
     .prompt([{
         name: 'username',
@@ -60,37 +24,38 @@ inquirer
     })
     .catch((error) => { console.log(error); });
 }
- */
+ 
 function setEmail() {
     inquirer
-    .prompt([{
-        name: 'email',
-        message: 'Digite seu email:'
-    }])
-    .then((resp) => {
-        if (validarCampo(resp.email)){
-            usuario['email'] = resp.email;
-            setSenha();
-        } 
-        else setEmail(); 
-    })
-    .catch((error) => { console.log(error); });
+        .prompt([{
+            name: 'email',
+            message: 'Digite seu email:'
+        }])
+        .then((resp) => {
+            let aux = resp.email;
+            if (validarCampo(aux) && aux.endsWith("@modalgr.com")) {
+                usuario['email'] = aux;
+                setSenha();
+            }
+            else setEmail();
+        })
+        .catch((error) => { console.log(error); });
 }
 
 function setSenha() {
     inquirer
-    .prompt([{
-        name: 'senha',
-        message: 'Digite sua senha:'
-    }])
-    .then((resp) => {   
-        if(validarSenha(resp.senha)){
-            usuario['senha'] =  resp.senha; 
-            salvarUsuario(usuario['email'], usuario['senha']);
-        } 
-        else setSenha();
-    })
-    .catch((error) => { console.log(error); });
+        .prompt([{
+            name: 'senha',
+            message: 'Digite sua senha:'
+        }])
+        .then((resp) => {
+            if (validarSenha(resp.senha)) {
+                usuario['senha'] = resp.senha;
+                salvarUsuario(usuario['email'], usuario['senha'], usuario['username']);
+            }
+            else setSenha();
+        })
+        .catch((error) => { console.log(error); });
 }
 
 
