@@ -1,9 +1,9 @@
 function validarCampo(campo) {
     if (!campo.length) {
         console.log("Campo obrigatorio");
-        return false;
+        return true;
     }
-    else return true;
+    else return false;
 }
 
 const usuario = {

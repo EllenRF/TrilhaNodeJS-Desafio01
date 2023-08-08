@@ -1,8 +1,7 @@
 import inquirer from 'inquirer';
-//import usuarios from '../usuarios.json' assert { type: 'json' };
 import { usuario } from './services.js'
 import { validarCampo } from './services.js'
-import { salvarUsuario } from '../firebaseServices/firebase.js';
+import { salvarUsuario, verificaEmail, verificaUsername } from '../firebaseServices/firebase.js';
 //let listaUsuarios = [];
 
 function cadastroNovoUsuario() {
@@ -10,21 +9,24 @@ function cadastroNovoUsuario() {
 }
 
 function setUsername() {
-inquirer
-    .prompt([{
-        name: 'username',
-        message: 'Digite seu username:'
-    }])
-    .then((resp) => {       
-        if (validarCampo(resp.username)){
-            usuario['username'] = resp.username;
-            setEmail();
-        } 
-        else setUsername(); 
-    })
-    .catch((error) => { console.log(error); });
+    inquirer
+        .prompt([{
+            name: 'username',
+            message: 'Digite seu username:'
+        }])
+        .then((resp) => {
+            if (validarCampo(resp.username) && verificaUsername(resp.username)) {
+                setUsername();
+            }
+           
+            else {
+                usuario['username'] = resp.username;
+                setEmail();
+            }
+        })
+        .catch((error) => { console.log(error); });
 }
- 
+
 function setEmail() {
     inquirer
         .prompt([{
@@ -32,12 +34,15 @@ function setEmail() {
             message: 'Digite seu email:'
         }])
         .then((resp) => {
-            let aux = resp.email;
-            if (validarCampo(aux) && aux.endsWith("@modalgr.com")) {
-                usuario['email'] = aux;
+            if (!validarCampo(resp.email) || resp.email.endsWith("@modalgr.com")) {
+                if(!verificaEmail(usuario['username'], resp.email))
+                usuario['email'] = resp.email;
                 setSenha();
             }
-            else setEmail();
+            else {
+                console.log("É obrigatório ser um email da ModalGr")
+                setEmail()
+            };
         })
         .catch((error) => { console.log(error); });
 }

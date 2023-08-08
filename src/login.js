@@ -1,8 +1,6 @@
 import inquirer from 'inquirer';
 import { validarCampo, usuario } from './services.js'
-import fs from 'fs';
-import usuarios from '../usuarios.json' assert { type: 'json' };
-import { leUmUsuario } from '../firebaseServices/firebase.js';
+import { leDadosUsuario } from '../firebaseServices/firebase.js';
 
 function logarUsuario() {
     inquirer
