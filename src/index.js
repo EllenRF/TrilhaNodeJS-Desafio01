@@ -14,8 +14,8 @@ inquirer.prompt(
     switch (answer.navegacao) {
         case '1':
             verificaUsername("teste");
-            leDadosUsuario("teste");
-            verificaEmail("issoeumteste");
+            //leDadosUsuario("teste");
+            //verificaEmail("issoeumteste");
             break;
         case '2':
             cadastroNovoUsuario();

@@ -14,11 +14,13 @@ function setUsername() {
             name: 'username',
             message: 'Digite seu username:'
         }])
-        .then((resp) => {
-            if (validarCampo(resp.username) && verificaUsername(resp.username)) {
+        .then(async (resp) => {
+            const vUsername = await verificaUsername(resp.username)
+
+            if (validarCampo(resp.username) || vUsername) {
                 setUsername();
             }
-           
+
             else {
                 usuario['username'] = resp.username;
                 setEmail();
@@ -33,15 +35,19 @@ function setEmail() {
             name: 'email',
             message: 'Digite seu email:'
         }])
-        .then((resp) => {
-            if (!validarCampo(resp.email) || resp.email.endsWith("@modalgr.com")) {
-                if(!verificaEmail(usuario['username'], resp.email))
-                usuario['email'] = resp.email;
-                setSenha();
+        .then(async (resp) => {
+
+            const vEmail = await verificaEmail(resp.email)
+            if (validarCampo(resp.email) || !resp.email.endsWith("@modalgr.com")) {
+                console.log("É obrigatório ser um email da ModalGr")
+                setEmail();
+            }
+            else if (vEmail) {
+                setEmail();
             }
             else {
-                console.log("É obrigatório ser um email da ModalGr")
-                setEmail()
+                usuario['email'] = resp.email;
+                setSenha();
             };
         })
         .catch((error) => { console.log(error); });
