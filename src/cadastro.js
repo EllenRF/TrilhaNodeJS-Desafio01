@@ -2,7 +2,7 @@ import inquirer from 'inquirer';
 import { usuario } from './services.js'
 import { validarCampo } from './services.js'
 import { salvarUsuario, verificaEmail, verificaUsername } from '../firebaseServices/firebase.js';
-//let listaUsuarios = [];
+
 
 function cadastroNovoUsuario() {
     setUsername();
