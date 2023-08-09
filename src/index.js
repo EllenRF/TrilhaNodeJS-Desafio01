@@ -7,15 +7,16 @@ iniciarFirebase();
 inquirer.prompt(
     [{
         name: 'navegacao',
-        message: '1- Login de Usuario \r\n  2- Cadastrar novo Usuario'
+        message: 'Fazer Login ou Cadastrar-se?',
     }]
-).then((answer) => {
-    // while(answer.navegacao != 1 || answer.navegacao != 2){
-    switch (answer.navegacao) {
+).then((resp) => {
+    if (resp.navegacao != 1 && resp.navegacao != 2) {
+        console.log("Digite apenas 1 ou 2");
+        return;
+    }
+    switch (resp.navegacao) {
         case '1':
-            verificaUsername("teste");
-            //leDadosUsuario("teste");
-            //verificaEmail("issoeumteste");
+            logarUsuario();
             break;
         case '2':
             cadastroNovoUsuario();

@@ -12,7 +12,7 @@ function setUsername() {
     inquirer
         .prompt([{
             name: 'username',
-            message: 'Digite seu username:'
+            message: 'Digite um username:'
         }])
         .then(async (resp) => {
             const vUsername = await verificaUsername(resp.username)
@@ -57,7 +57,9 @@ function setSenha() {
     inquirer
         .prompt([{
             name: 'senha',
-            message: 'Digite sua senha:'
+            message: 'Digite sua senha:',
+            type: 'password',
+            mask: '*'
         }])
         .then((resp) => {
             if (validarSenha(resp.senha)) {
