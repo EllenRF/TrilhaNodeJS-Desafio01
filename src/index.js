@@ -6,7 +6,7 @@ import { logarUsuario } from './login.js';
 inquirer.prompt(
     [{
         name: 'navegacao',
-        message: '(1) Fazer Login ou (2)Cadastrar-se?',
+        message: '(1) Fazer Login ou (2) Cadastrar-se?',
     }]
 ).then((resp) => {
     if (resp.navegacao != 1 && resp.navegacao != 2) {

@@ -39,11 +39,9 @@ function setEmail() {
                 setEmail();
                 return;
             }
-          
-                usuario['email'] = resp.email;
-                setSenha();
-            
 
+            usuario['email'] = resp.email;
+            setSenha();
         })
         .catch((error) => { console.log(error); });
 }
