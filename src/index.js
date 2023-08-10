@@ -1,13 +1,12 @@
-import cadastroNovoUsuario from './cadastro.js';
+import iniciarCadastro from './cadastro.js';
 import inquirer from 'inquirer';
-import { iniciarFirebase, leDadosUsuario, verificaEmail, verificaUsername } from '../firebaseServices/firebase.js';
 import { logarUsuario } from './login.js';
 
-iniciarFirebase();
+//inicia Primeiro prompt de pergunta
 inquirer.prompt(
     [{
         name: 'navegacao',
-        message: 'Fazer Login ou Cadastrar-se?',
+        message: '(1) Fazer Login ou (2)Cadastrar-se?',
     }]
 ).then((resp) => {
     if (resp.navegacao != 1 && resp.navegacao != 2) {
@@ -19,8 +18,7 @@ inquirer.prompt(
             logarUsuario();
             break;
         case '2':
-            cadastroNovoUsuario();
+            iniciarCadastro();
             break;
     }
-    //} 
 }).catch((err) => console.log(err))

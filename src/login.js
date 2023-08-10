@@ -1,13 +1,12 @@
 import inquirer from 'inquirer';
-import { validarCampo, usuario } from './services.js'
+import { campoVazio } from './services.js'
 import { leDadosUsuario } from '../firebaseServices/firebase.js';
-
 
 function logarUsuario() {
     inquirer
         .prompt([{
-            name: 'username',
-            message: 'Digite seu username:'
+            name: 'apelido',
+            message: 'Digite seu apelido:',
         },
         {
             name: 'usuarioSenha',
@@ -16,10 +15,10 @@ function logarUsuario() {
             mask: '*'
         }])
         .then((resp) => {
-            if (validarCampo(resp.username) || validarCampo(resp.usuarioSenha)) {
+            if (campoVazio(resp.apelido) || campoVazio(resp.usuarioSenha)) {
                 logarUsuario();
             }
-            leDadosUsuario(resp.username, resp.usuarioSenha);
+            leDadosUsuario(resp.apelido, resp.usuarioSenha);
         })
         .catch((err) => { console.log(err) })
 }

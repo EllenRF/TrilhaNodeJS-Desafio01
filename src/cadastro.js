@@ -1,30 +1,23 @@
 import inquirer from 'inquirer';
-import { usuario } from './services.js'
-import { validarCampo } from './services.js'
-import { salvarUsuario, verificaEmail, verificaUsername } from '../firebaseServices/firebase.js';
+import { campoVazio, usuario } from './services.js'
+import { apelidoExistente, emailExistente, salvarUsuario } from '../firebaseServices/firebase.js';
 
 
-function cadastroNovoUsuario() {
-    setUsername();
-}
-
-function setUsername() {
+function iniciarCadastro() {
     inquirer
         .prompt([{
-            name: 'username',
-            message: 'Digite um username:'
+            name: 'apelido',
+            message: 'Digite um apelido:'
         }])
         .then(async (resp) => {
-            const vUsername = await verificaUsername(resp.username)
 
-            if (validarCampo(resp.username) || vUsername) {
-                setUsername();
+            if (campoVazio(resp.apelido) || await apelidoExistente(resp.apelido)) {
+                // Pergunta novamente o apelido
+                iniciarCadastro();
+                return;
             }
-
-            else {
-                usuario['username'] = resp.username;
-                setEmail();
-            }
+            usuario['apelido'] = resp.apelido;
+            setEmail();
         })
         .catch((error) => { console.log(error); });
 }
@@ -37,18 +30,20 @@ function setEmail() {
         }])
         .then(async (resp) => {
 
-            const vEmail = await verificaEmail(resp.email)
-            if (validarCampo(resp.email) || !resp.email.endsWith("@modalgr.com")) {
+            const existeEmail = await emailExistente(resp.email)
+            if (campoVazio(resp.email) || !resp.email.endsWith("@modalgr.com.br")) {
                 console.log("É obrigatório ser um email da ModalGr")
                 setEmail();
             }
-            else if (vEmail) {
+            else if (existeEmail) {
                 setEmail();
+                return;
             }
-            else {
+          
                 usuario['email'] = resp.email;
                 setSenha();
-            };
+            
+
         })
         .catch((error) => { console.log(error); });
 }
@@ -62,11 +57,13 @@ function setSenha() {
             mask: '*'
         }])
         .then((resp) => {
-            if (validarSenha(resp.senha)) {
+            const senhaValidada = validarSenha(resp.senha)
+            if (senhaValidada) {
                 usuario['senha'] = resp.senha;
-                salvarUsuario(usuario['email'], usuario['senha'], usuario['username']);
+                salvarUsuario(usuario);
+                return;
             }
-            else setSenha();
+            setSenha();
         })
         .catch((error) => { console.log(error); });
 }
@@ -90,4 +87,4 @@ function validarSenha(senha) {
     return true;
 }
 
-export default cadastroNovoUsuario;
+export default iniciarCadastro;
