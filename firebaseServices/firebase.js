@@ -1,6 +1,5 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs, doc, setDoc, getDoc } from 'firebase/firestore';
-import { usuario } from '../src/services.js';
 
 const firebaseConfig = {
     apiKey: "AIzaSyDvafoj8hd16GRa-_8Fnfq-jmPCKnOzkS0",
@@ -12,7 +11,7 @@ const firebaseConfig = {
     measurementId: "G-F5J37KZ1ZK"
 };
 
-// Initialize Firebase
+// Inicia Firebase
 function iniciarFirebase() {
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
@@ -21,60 +20,61 @@ function iniciarFirebase() {
 
 const usuariosRef = collection(iniciarFirebase(), "usuarios");
 
-async function salvarUsuario(email, senha, username) {
-    await setDoc(doc(usuariosRef, username), {
+async function salvarUsuario({ email, senha, apelido }) {
+    await setDoc(doc(usuariosRef, apelido), {
         email: email,
         senha: senha
     }, { merge: true });
     console.log(`${email} cadastradado!`);
-    return;
+    process.exit();
 }
 
-async function leDadosUsuario(username, senha) {
+async function leDadosUsuario(apelido, senha) {
     try {
-        const docRef = doc(usuariosRef, username);
+        const docRef = doc(usuariosRef, apelido);
         const docSnap = await getDoc(docRef);
 
-        if (!docSnap.exists()) {
-            console.log(`${username} não encontrado`)
-            return;
+        if (!docSnap.exists() || docSnap.data().senha !== senha ) {       
+            console.log("Apelido ou senha inválidos");
+            process.exit();
         }
-        else {
-            if (docSnap.data().senha === senha) {
-                console.log(`Seja bem vindo ${docSnap.id} :D`)
-            }
-        }
+        console.log(`Seja bem vindo ${docSnap.id} :D`);
+        process.exit();
+        
     }
     catch (err) { (err) => console.log(err) }
-    return;
 }
 
-async function verificaUsername(username) {
+async function apelidoExistente(apelido) {
     try {
-        const docRef = doc(usuariosRef, username)
+        let existeApelido = false
+        const docRef = doc(usuariosRef, apelido)
         //getDoc serve para providenciar os conteudos do documento referênciado
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-            console.log(`${username} já existente. Digite outro`);
-            return true;
+            console.log(`${apelido} já existente. Digite outro`);
+            existeApelido = true;
         }
-        else return false;
+        return existeApelido;
     }
     catch (err) { (err) => console.log(err) }
 
 }
 
-async function verificaEmail(emailUsuario) {
-    //getDocs executa uma query sobre os documentos da coleção. Não confundir com getDoc
-    const querySnap = await getDocs(usuariosRef);
-    let vEmail = false;
-    querySnap.forEach((doc) => {
-        if (doc.data().email == emailUsuario) {
-            console.log(`\n ${emailUsuario} já existente. Digite outro`);
-            vEmail = true;
-        }
-    });
+async function emailExistente(emailUsuario) {
+    try {
 
-    return vEmail;
+        //getDocs executa uma query sobre os documentos da coleção. Não confundir com getDoc
+        const querySnap = await getDocs(usuariosRef);
+        let emailExiste = false;
+        querySnap.forEach((doc) => {
+            if (doc.data().email == emailUsuario) {
+                console.log(`\n ${emailUsuario} já existente. Digite outro`);
+                emailExiste = true;
+            }
+        });
+        return emailExiste;
+    } catch (err) { (err) => console.log(err) }
+
 }
-export { salvarUsuario, iniciarFirebase, leDadosUsuario, verificaUsername, verificaEmail }
+export { salvarUsuario, iniciarFirebase, leDadosUsuario, apelidoExistente, emailExistente }
