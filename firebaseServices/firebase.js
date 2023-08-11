@@ -1,14 +1,17 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs, doc, setDoc, getDoc } from 'firebase/firestore';
+import { configDotenv} from 'dotenv'
+
+configDotenv()
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDvafoj8hd16GRa-_8Fnfq-jmPCKnOzkS0",
-    authDomain: "desafio01-eabe8.firebaseapp.com",
-    projectId: "desafio01-eabe8",
-    storageBucket: "desafio01-eabe8.appspot.com",
-    messagingSenderId: "121695439553",
-    appId: "1:121695439553:web:92d4216b0e011729136240",
-    measurementId: "G-F5J37KZ1ZK"
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+    projectId:process.env.FIREBASE_PROJECT_ID,
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.FIREBASE_APP_ID,
+    measurementId: process.env.FIREBASE_MEASUREMENT_ID,
 };
 
 // Inicia Firebase
