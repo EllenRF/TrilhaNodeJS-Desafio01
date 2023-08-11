@@ -23,16 +23,16 @@ Primeiro desafio do processo de formação: criar um sistema de autenticação q
 
 ## Configurando o .env (Máquina local)
 
-- Por questão de avaliação de projeto, as configurações de ambiente serão disponibilizadas aqui, é um projeto de com intuito de aprendizado então a invasão não representa risco.
+- conecte seu firestore database criando um arquivo .env e colocando as seguintes keys do seu projeto.
 
 ```bash
-FIREBASE_API_KEY="AIzaSyDvafoj8hd16GRa-_8Fnfq-jmPCKnOzkS0"
-FIREBASE_AUTH_DOMAIN="desafio01-eabe8.firebaseapp.com"
-FIREBASE_PROJECT_ID="desafio01-eabe8"
-FIREBASE_STORAGE_BUCKET="desafio01-eabe8.appspot.com"
-FIREBASE_MESSAGING_SENDER_ID="121695439553"
-FIREBASE_APP_ID="1:121695439553:web:92d4216b0e011729136240"
-FIREBASE_MEASUREMENT_ID="G-F5J37KZ1ZK"
+FIREBASE_API_KEY=your_api_key
+FIREBASE_AUTH_DOMAIN=your_auth_domain
+FIREBASE_PROJECT_ID=your_project_id
+FIREBASE_STORAGE_BUCKET=your_storage_bucket
+FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+FIREBASE_APP_ID=your_app_id
+FIREBASE_MEASUREMENT_ID=your_measurement_id
 ```
 ## Dependências
 - [Firestore Database](https://www.npmjs.com/package/@firebase/firestore) - Banco de dados NoSQL do Firebase para armazenamento de usuários.
